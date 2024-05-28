@@ -1,0 +1,3 @@
+apis:
+  todolist.json:
+    alias: todolist-restful-api

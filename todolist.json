@@ -1,0 +1,398 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Todolist RESTful API",
+    "description": "OpenAPI Spec for Todolist RESTful API",
+    "version": "1",
+    "contact": {
+      "name": "Muhammad Nabil",
+      "email": "mnabil1718@gmail.com",
+      "url": "https://protofolio-theta.vercel.app"
+    },
+    "license": {
+      "name": "APACHE 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{environtment}.programmerzamannow.com/api/v1",
+      "description": "todolist RESTful API Server",
+      "variables": {
+        "environtment": {
+          "default": "dev",
+          "description": "Server environtments",
+          "enum": ["dev", "staging", "prod", "qa"]
+        }
+      }
+    }
+  ],
+  "externalDocs": {
+    "url": "https://go.dev",
+    "description": "External Documentation"
+  },
+  "paths": {
+    "/todolist": {
+      "get": {
+        "tags": ["Todolist"],
+        "summary": "Get all todolist",
+        "description": "Return a list of all active todolist item",
+        "responses": {
+          "200": {
+            "description": "Success get all todolist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "Auto increment id of todolist item",
+                        "nullable": false
+                      },
+                      "title": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200,
+                        "description": "title of a todolist",
+                        "nullable": false
+                      },
+                      "priority": {
+                        "type": "string",
+                        "default": "high",
+                        "enum": ["high", "medium", "low"],
+                        "nullable": false
+                      },
+                      "deadline": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "tags": {
+                        "type": "array",
+                        "minItems": 0,
+                        "nullable": false,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "title": "Belajar Pemrograman Java",
+                    "priority": "medium",
+                    "deadline": "2024-08-17",
+                    "tags": ["Java", "Pemrograman"]
+                  },
+                  {
+                    "id": 2,
+                    "title": "Bebersih rumah",
+                    "priority": "low",
+                    "deadline": "2024-05-28",
+                    "tags": ["Chorus", "Hygene"]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "include_done",
+            "description": "Whether to include done todolist item or not in the result list",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "nullable": true
+            }
+          },
+          {
+            "name": "name",
+            "description": "search todolist by name",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "nullable": true
+            },
+            "examples": {
+              "java": {
+                "description": "Search for todolist named java",
+                "value": "java"
+              },
+
+              "php": {
+                "description": "Search for todolist named php",
+                "value": "php"
+              },
+
+              "python3": {
+                "description": "Search for todolist named python3",
+                "value": "python3"
+              }
+            }
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Todolist"],
+        "summary": "Create new todolist",
+        "description": "Create new active todolist. Returns newly created todolist item.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "examples": {
+                "java": {
+                  "value": {
+                    "title": "Belajar Pemrograman Java",
+                    "priority": "high",
+                    "deadline": "2024-08-17",
+                    "tags": ["Java", "Pemrograman"]
+                  }
+                },
+                "php": {
+                  "value": {
+                    "title": "Belajar Pemrograman PHP",
+                    "priority": "high",
+                    "deadline": "2024-08-17",
+                    "tags": ["PHP", "Pemrograman"]
+                  }
+                }
+              },
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "priority": {
+                    "type": "string",
+                    "minLength": 1,
+                    "default": "medium",
+                    "enum": ["high", "medium", "low"]
+                  },
+                  "deadline": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success create new todolist item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Auto increment id of todolist item",
+                      "nullable": false
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "description": "title of a todolist",
+                      "nullable": false
+                    },
+                    "priority": {
+                      "type": "string",
+                      "default": "high",
+                      "enum": ["high", "medium", "low"],
+                      "nullable": false
+                    },
+                    "deadline": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "tags": {
+                      "type": "array",
+                      "minItems": 0,
+                      "nullable": false,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "id": 1,
+                  "title": "Belajar Pemrograman Java",
+                  "priority": "medium",
+                  "deadline": "2024-08-17",
+                  "tags": ["Java", "Pemrograman"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todolist/{todolistId}": {
+      "put": {
+        "tags": ["Todolist"],
+        "summary": "Update existing todolist",
+        "description": "Update active todolist. Returns newly updated todolist item.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "priority": {
+                    "type": "string",
+                    "minLength": 1,
+                    "default": "medium",
+                    "enum": ["high", "medium", "low"]
+                  },
+                  "deadline": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success update existing todolist item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Auto increment id of todolist item",
+                      "nullable": false
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "description": "title of a todolist",
+                      "nullable": false
+                    },
+                    "priority": {
+                      "type": "string",
+                      "default": "high",
+                      "enum": ["high", "medium", "low"],
+                      "nullable": false
+                    },
+                    "deadline": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "tags": {
+                      "type": "array",
+                      "minItems": 0,
+                      "nullable": false,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "id": 1,
+                  "title": "Belajar Pemrograman Java",
+                  "priority": "medium",
+                  "deadline": "2024-08-17",
+                  "tags": ["Java", "Pemrograman"]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "todolist item id for update operation",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "nullable": false
+            }
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Todolist"],
+        "summary": "Delete existing todolist",
+        "description": "Delete existing todolist. Returns nothing.",
+        "responses": {
+          "200": {
+            "description": "Success delete existing todolist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "todolist item id for delete operation",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "nullable": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}
